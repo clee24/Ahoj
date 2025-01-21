@@ -12,13 +12,13 @@ A text-to-speech iOS application built with Flutter that provides an accessible 
   - Delete button for each phrase
 - Clear text button for easy input management
 - iMessage integration for sharing text
-- Language selection support (coming soon)
+- Language selection support (🔧 in progress)
 
 ## Planned Features
 
-### Voice Personalization
+### Voice Personalization (🔧 in progress)
 - Custom voice recording feature to allow users to use their own voice
-  - Initial implementation will focus on creating a personalized voice model for a specific user
+  - Initial implementation will focus on creating a personalized voice model of myself for my brother to use
   - Future expansion to allow any user to record and use their own voice
   - This will enable more personal and meaningful communication, especially valuable for users who want to maintain their identity through their voice
 
@@ -27,12 +27,14 @@ A text-to-speech iOS application built with Flutter that provides an accessible 
 Built with:
 - Flutter 3.27.1
 - Dart 3.6.0
-- iOS-native Cupertino widgets for authentic iOS look and feel
+- iOS-native Cupertino widgets
 - SharedPreferences for local storage
 - flutter_tts for text-to-speech capabilities
 - url_launcher for iMessage integration
 
 ## Getting Started
+
+Since I don't have an apple dev subscription, this app can only be ran from your IDE. 
 
 To run this project:
 
