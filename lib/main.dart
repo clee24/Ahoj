@@ -11,7 +11,7 @@ class AhojApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CupertinoApp(
-      title: 'Ahoj',
+      title: 'Ahoj!',
       theme: CupertinoThemeData(
         primaryColor: CupertinoColors.systemBlue,
         brightness: Brightness.light,

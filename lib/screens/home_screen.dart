@@ -20,6 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadSavedPhrases();
+    _textController.addListener(() {
+      setState(() {
+        // Trigger rebuild to show/hide clear button
+      });
+    });
   }
 
   Future<void> _loadSavedPhrases() async {
@@ -44,6 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _deletePhrase(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    final phrases = List<String>.from(_savedPhrases);
+    phrases.removeAt(index);
+    await prefs.setStringList('saved_phrases', phrases);
+    setState(() {
+      _savedPhrases = phrases;
+    });
+  }
+
   Future<void> _shareViaMessage(String text) async {
     final Uri smsUri = Uri.parse('sms:?body=${Uri.encodeComponent(text)}');
     if (await canLaunchUrl(smsUri)) {
@@ -51,18 +66,33 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _clearText() {
+    _textController.clear();
+    _ttsService.stop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Ahoj'),
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('Ahoj!'),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            // Language selection to be implemented
+          },
+          child: const Icon(CupertinoIcons.globe),
+        ),
       ),
       child: SafeArea(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: CupertinoTextField(
+              child: Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  CupertinoTextField(
                 controller: _textController,
                 placeholder: 'Type or select a phrase...',
                 keyboardType: TextInputType.text,
@@ -75,6 +105,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 maxLines: 3,
+                  ),
+                  if (_textController.text.isNotEmpty)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: _clearText,
+                        child: const Icon(
+                          CupertinoIcons.clear_circled_solid,
+                          color: CupertinoColors.systemGrey,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             Padding(
@@ -116,13 +161,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   : ListView.builder(
                       itemCount: _savedPhrases.length,
                       itemBuilder: (context, index) {
-                        return CupertinoListTile(
-                          title: Text(_savedPhrases[index]),
-                          trailing: const CupertinoListTileChevron(),
-                          onTap: () {
-                            _textController.text = _savedPhrases[index];
-                            _ttsService.speak(_savedPhrases[index]);
-                          },
+                        return Dismissible(
+                          key: Key(_savedPhrases[index]),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: 20.0),
+                            color: CupertinoColors.destructiveRed,
+                            child: const Icon(
+                              CupertinoIcons.delete,
+                              color: CupertinoColors.white,
+                            ),
+                          ),
+                          onDismissed: (direction) => _deletePhrase(index),
+                          child: CupertinoListTile(
+                            title: Text(_savedPhrases[index]),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () => _deletePhrase(index),
+                                  child: const Icon(
+                                    CupertinoIcons.delete,
+                                    color: CupertinoColors.destructiveRed,
+                                  ),
+                                ),
+                                const CupertinoListTileChevron(),
+                              ],
+                            ),
+                            onTap: () {
+                              _textController.text = _savedPhrases[index];
+                              _ttsService.speak(_savedPhrases[index]);
+                            },
+                          ),
                         );
                       },
                     ),
