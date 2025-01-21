@@ -5,7 +5,7 @@ A text-to-speech iOS application built with Flutter that provides an accessible 
 ## Current Features
 
 - Text-to-speech functionality with high-quality voice output
-- Native iOS keyboard with built-in word and sentence prediction
+- Integration with the native iOS keyboard for word and sentence prediction
 - Save and manage frequently used phrases
   - Quick access to saved phrases
   - Swipe-to-delete functionality
