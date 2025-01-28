@@ -18,7 +18,7 @@ A text-to-speech iOS application built with Flutter that provides an accessible 
 
 ### Voice Personalization (🔧 in progress)
 - Custom voice recording feature to allow users to use their own voice
-  - Initial implementation will focus on creating a personalized voice model of myself for my brother to use
+  - Initial implementation will focus on creating a personalized voice model of me for my brother to use
   - Future expansion to allow any user to record and use their own voice
   - This will enable more personal and meaningful communication, especially valuable for users who want to maintain their identity through their voice
 
